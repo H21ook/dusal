@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { subscribeUser, unsubscribeUser, sendNotification } from '@/actions'
 import { urlBase64ToUint8Array, arrayBufferToBase64 } from '@/lib/client-utils'
+import InstallPrompt from '@/components/custom/InstallPromt'
 
 function PushNotificationManager() {
   const [isSupported, setIsSupported] = useState(false)
@@ -88,75 +89,6 @@ function PushNotificationManager() {
     </div>
   )
 }
-
-function InstallPrompt() {
-  const [isIOS, setIsIOS] = useState(false)
-  const [isStandalone, setIsStandalone] = useState(false)
-
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [isInstallable, setIsInstallable] = useState(false);
-
-  useEffect(() => {
-    setIsIOS(
-      /iPad|iPhone|iPod/.test(navigator.userAgent) && !('MSStream' in window)
-    )
-
-    setIsStandalone(window.matchMedia('(display-mode: standalone)').matches)
-  }, [])
-
-  useEffect(() => {
-    const handler = (e: Event) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-      setIsInstallable(true);
-    };
-    window.addEventListener('beforeinstallprompt', handler);
-    return () => window.removeEventListener('beforeinstallprompt', handler);
-  }, []);
-
-  const handleInstallClick = () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then((choiceResult: any) => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted the install prompt');
-        } else {
-          console.log('User dismissed the install prompt');
-        }
-        setDeferredPrompt(null);
-        setIsInstallable(false);
-      });
-    }
-  };
-
-
-  if (isStandalone) {
-    return null // Don't show install button if already installed
-  }
-
-  return (
-    <div>
-      <h3>Install App</h3>
-      <button onClick={handleInstallClick}>Add to Home Screen</button>
-      {isIOS && (
-        <p>
-          To install this app on your iOS device, tap the share button
-          <span role="img" aria-label="share icon">
-            {' '}
-            ⎋{' '}
-          </span>
-          and then &quot;Add to Home Screen&quot;
-          <span role="img" aria-label="plus icon">
-            {' '}
-            ➕{' '}
-          </span>
-          .
-        </p>
-      )}
-    </div>
-  )
-}
-
 
 
 export default function Page() {

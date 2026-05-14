@@ -18,7 +18,7 @@ self.addEventListener('push', function (event) {
 self.addEventListener('notificationclick', function (event) {
   console.log('Notification click received.')
   event.notification.close()
-  event.waitUntil(clients.openWindow('<https://your-website.com>'))
+  event.waitUntil(clients.openWindow('https://dusal-eight.vercel.app/'))
 })
 
 self.addEventListener('install', event => {
@@ -29,8 +29,8 @@ self.addEventListener('activate', event => {
   event.waitUntil(clients.claim());
 });
 
+
 self.addEventListener('fetch', event => {
-  // Үндсэн caching стратеги
   event.respondWith(
     caches.match(event.request).then(response => {
       return response || fetch(event.request);
