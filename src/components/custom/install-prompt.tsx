@@ -1,27 +1,33 @@
 'use client';
 
+import { useIsClient } from '@/hooks/use-is-client';
 import { useEffect, useState } from 'react';
 
+interface BeforeInstallPromptEvent extends Event {
+    prompt: () => Promise<void>;
+    userChoice: Promise<{
+        outcome: 'accepted' | 'dismissed';
+        platform: string;
+    }>;
+}
+
 export default function InstallPrompt() {
-    const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+    const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
     const [showButton, setShowButton] = useState(false);
-    const [isIOS, setIsIOS] = useState(false);
-    const [isStandalone, setIsStandalone] = useState(false);
+
+    const isClient = useIsClient();
+    const isIOS = isClient && /iPad|iPhone|iPod/.test(navigator.userAgent) && !('MSStream' in window);
+    const isStandalone = isClient && window.matchMedia('(display-mode: standalone)').matches;
 
     useEffect(() => {
-        setIsIOS(/iPad|iPhone|iPod/.test(navigator.userAgent) && !('MSStream' in window));
-        setIsStandalone(window.matchMedia('(display-mode: standalone)').matches);
-    }, []);
-
-    useEffect(() => {
-        const handler = (e: Event) => {
+        const handler = (e: BeforeInstallPromptEvent) => {
             console.log('beforeinstallprompt captured');
             e.preventDefault();
             setDeferredPrompt(e);
             setShowButton(true);
         };
-        window.addEventListener('beforeinstallprompt', handler);
-        return () => window.removeEventListener('beforeinstallprompt', handler);
+        window.addEventListener('beforeinstallprompt', handler as EventListener);
+        return () => window.removeEventListener('beforeinstallprompt', handler as EventListener);
     }, []);
 
     const handleInstall = () => {
@@ -52,7 +58,7 @@ export default function InstallPrompt() {
             )}
             {isIOS && (
                 <p>
-                    iOS төхөөрөмж дээр суулгахын тулд Share → "Add to Home Screen" дээр дарна уу.
+                    iOS төхөөрөмж дээр суулгахын тулд Share → &quot;Add to Home Screen&quot; дээр дарна уу.
                 </p>
             )}
         </div>
