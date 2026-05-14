@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { subscribeUser, unsubscribeUser, sendNotification } from '@/actions'
-import { urlBase64ToUint8Array } from '@/lib/client-utils'
+import { urlBase64ToUint8Array, arrayBufferToBase64 } from '@/lib/client-utils'
 
 function PushNotificationManager() {
   const [isSupported, setIsSupported] = useState(false)
@@ -10,13 +10,6 @@ function PushNotificationManager() {
     null
   )
   const [message, setMessage] = useState('')
- 
-  useEffect(() => {
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
-      setIsSupported(true)
-      registerServiceWorker()
-    }
-  }, [])
  
   async function registerServiceWorker() {
     const registration = await navigator.serviceWorker.register('/sw.js', {
@@ -27,6 +20,14 @@ function PushNotificationManager() {
     setSubscription(sub)
   }
  
+  useEffect(() => {
+    const supported = typeof window !== 'undefined' && 'serviceWorker' in navigator && 'PushManager' in window
+    setIsSupported(supported)
+    if (supported) {
+      registerServiceWorker()
+    }
+  }, [])
+ 
   async function subscribeToPush() {
     const registration = await navigator.serviceWorker.ready
     const sub = await registration.pushManager.subscribe({
@@ -36,7 +37,13 @@ function PushNotificationManager() {
       ),
     })
     setSubscription(sub)
-    const serializedSub = JSON.parse(JSON.stringify(sub))
+    const serializedSub = {
+      endpoint: sub.endpoint,
+      keys: {
+        p256dh: arrayBufferToBase64(sub.getKey('p256dh')!),
+        auth: arrayBufferToBase64(sub.getKey('auth')!),
+      }
+    }
     await subscribeUser(serializedSub)
   }
  
@@ -88,7 +95,7 @@ function InstallPrompt() {
  
   useEffect(() => {
     setIsIOS(
-      /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream
+      /iPad|iPhone|iPod/.test(navigator.userAgent) && !('MSStream' in window)
     )
  
     setIsStandalone(window.matchMedia('(display-mode: standalone)').matches)
