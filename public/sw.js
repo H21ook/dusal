@@ -20,3 +20,20 @@ self.addEventListener('notificationclick', function (event) {
   event.notification.close()
   event.waitUntil(clients.openWindow('<https://your-website.com>'))
 })
+
+self.addEventListener('install', event => {
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(clients.claim());
+});
+
+self.addEventListener('fetch', event => {
+  // Үндсэн caching стратеги
+  event.respondWith(
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
+    })
+  );
+});

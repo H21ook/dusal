@@ -10,7 +10,7 @@ function PushNotificationManager() {
     null
   )
   const [message, setMessage] = useState('')
- 
+
   async function registerServiceWorker() {
     const registration = await navigator.serviceWorker.register('/sw.js', {
       scope: '/',
@@ -19,7 +19,7 @@ function PushNotificationManager() {
     const sub = await registration.pushManager.getSubscription()
     setSubscription(sub)
   }
- 
+
   useEffect(() => {
     const supported = typeof window !== 'undefined' && 'serviceWorker' in navigator && 'PushManager' in window
     setIsSupported(supported)
@@ -27,7 +27,7 @@ function PushNotificationManager() {
       registerServiceWorker()
     }
   }, [])
- 
+
   async function subscribeToPush() {
     const registration = await navigator.serviceWorker.ready
     const sub = await registration.pushManager.subscribe({
@@ -46,24 +46,24 @@ function PushNotificationManager() {
     }
     await subscribeUser(serializedSub)
   }
- 
+
   async function unsubscribeFromPush() {
     await subscription?.unsubscribe()
     setSubscription(null)
     await unsubscribeUser()
   }
- 
+
   async function sendTestNotification() {
     if (subscription) {
       await sendNotification(message)
       setMessage('')
     }
   }
- 
+
   if (!isSupported) {
     return <p>Push notifications are not supported in this browser.</p>
   }
- 
+
   return (
     <div>
       <h3>Push Notifications</h3>
@@ -92,23 +92,52 @@ function PushNotificationManager() {
 function InstallPrompt() {
   const [isIOS, setIsIOS] = useState(false)
   const [isStandalone, setIsStandalone] = useState(false)
- 
+
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isInstallable, setIsInstallable] = useState(false);
+
   useEffect(() => {
     setIsIOS(
       /iPad|iPhone|iPod/.test(navigator.userAgent) && !('MSStream' in window)
     )
- 
+
     setIsStandalone(window.matchMedia('(display-mode: standalone)').matches)
   }, [])
- 
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setIsInstallable(true);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstallClick = () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult: any) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the install prompt');
+        } else {
+          console.log('User dismissed the install prompt');
+        }
+        setDeferredPrompt(null);
+        setIsInstallable(false);
+      });
+    }
+  };
+
+
   if (isStandalone) {
     return null // Don't show install button if already installed
   }
- 
+
   return (
     <div>
       <h3>Install App</h3>
-      <button>Add to Home Screen</button>
+      <button onClick={handleInstallClick}>Add to Home Screen</button>
       {isIOS && (
         <p>
           To install this app on your iOS device, tap the share button
