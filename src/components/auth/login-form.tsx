@@ -4,12 +4,14 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { signIn } from '@/actions/auth'
 import { Button } from '@/components/ui/button'
+import { useRouter } from 'next/navigation'
 
 export function LoginForm() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
+    const router = useRouter()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -19,10 +21,13 @@ export function LoginForm() {
         try {
             const result = await signIn(email, password)
 
-            if (result?.error) {
-                setError(result.error)
+            if (result?.success) {
+                router.replace('/main')
+            } else {
+                setError(result?.error || "")
             }
         } catch (err) {
+            console.log("wtf ", err)
             setError(err instanceof Error ? err.message : 'An error occurred')
         } finally {
             setLoading(false)
@@ -51,6 +56,7 @@ export function LoginForm() {
                         id="email"
                         type="email"
                         required
+                        autoComplete="off"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -66,6 +72,7 @@ export function LoginForm() {
                         id="password"
                         type="password"
                         required
+                        autoComplete="off"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"

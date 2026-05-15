@@ -61,7 +61,7 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
 
   if (isAuthRoute && hasSession) {
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(new URL("/main", request.url));
   }
 
   return supabaseResponse;
