@@ -60,11 +60,7 @@ export function LoginForm() {
 
     return (
         <div className="w-full max-w-md mx-auto space-y-6">
-            {/* <div className="space-y-2 text-center">
-                <h1 className="text-2xl font-bold">Sign In</h1>
-                <p className="text-gray-500">Enter your credentials to access your account</p>
-            </div> */}
-            <Card className="w-full max-w-sm">
+            <Card className="w-full max-w-sm bg-clip-padding backdrop-filter backdrop-blur bg-card/40">
                 <CardHeader>
                     <CardTitle>Login to your account</CardTitle>
                     <CardDescription>
