@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+// import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { User } from "@supabase/supabase-js"
 import { Bell } from "lucide-react"
 
@@ -11,18 +11,19 @@ const HomeHeader = ({
     user: User
 }) => {
     const username = user.email?.split("@")[0] || "User"
-    const fallback = username.slice(0, 2).toUpperCase()
+    const firstPart = username.slice(0, 1).toUpperCase()
+    const lastPart = username.substring(1).toLowerCase()
 
     return (
         <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-2xl supports-backdrop-filter:bg-background/60">
             <div className="mx-auto flex max-w-lg items-center justify-between px-4 py-3">
                 <div className="flex min-w-0 items-center gap-3">
-                    <Avatar size="lg" className="shadow-sm">
+                    {/* <Avatar size="lg" className="shadow-sm">
                         <AvatarFallback className="bg-muted font-semibold">{fallback}</AvatarFallback>
-                    </Avatar>
+                    </Avatar> */}
                     <div className="min-w-0">
                         <p className="text-xs text-muted-foreground">Сайн уу?</p>
-                        <h1 className="truncate text-base font-semibold">{username}</h1>
+                        <h1 className="truncate text-base font-bold"><span className="uppercase">{firstPart}</span>{lastPart}</h1>
                     </div>
                 </div>
 
