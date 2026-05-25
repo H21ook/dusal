@@ -1,6 +1,6 @@
 "use client"
 
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
 
@@ -19,7 +19,7 @@ const Header = ({
 
     return (
         <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-2xl supports-backdrop-filter:bg-background/60" style={{
-            paddingTop: 'calc(env(safe-area-inset-top, 16px) + 1px)'
+            paddingTop: 'env(safe-area-inset-top, 16px)'
         }}>
             <div className="mx-auto grid h-16 max-w-lg grid-cols-[3rem_1fr_3rem] items-center gap-2 px-4">
                 <div className="flex items-center justify-start">

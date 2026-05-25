@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   manifest: '/manifest.webmanifest',
   appleWebApp: {
     capable: true,
-    statusBarStyle: 'black-translucent', // Дэлгэцийг тулгаж харуулах (Дээд хэсэг харагдац гоё болно)
+    statusBarStyle: 'default', // Дэлгэцийг тулгаж харуулах (Дээд хэсэг харагдац гоё болно)
     title: 'NomadDarts',
   },
 };
