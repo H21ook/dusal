@@ -18,7 +18,7 @@ const Header = ({
     const router = useRouter()
 
     return (
-        <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-2xl supports-backdrop-filter:bg-background/60">
+        <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-2xl supports-backdrop-filter:bg-background/60 pt-[env(safe-area-inset-top, 16px)]">
             <div className="mx-auto grid h-16 max-w-lg grid-cols-[3rem_1fr_3rem] items-center gap-2 px-4">
                 <div className="flex items-center justify-start">
                     {showBack ? (
