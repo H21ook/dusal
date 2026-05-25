@@ -8,7 +8,7 @@ const ProtectedLayout = ({
 }) => {
     return (
         <div className="min-h-dvh bg-muted/30">
-            <div className="mx-auto min-h-dvh max-w-lg bg-background/80 pb-32 backdrop-blur">
+            <div className="mx-auto min-h-dvh max-w-lg bg-background pb-32 backdrop-blur">
                 {children}
             </div>
             <BottomNavigation />
