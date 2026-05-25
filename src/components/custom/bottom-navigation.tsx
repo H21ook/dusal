@@ -33,8 +33,8 @@ const BottomNavigation = () => {
   const pathname = usePathname()
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-50 px-5 pb-[calc(env(safe-area-inset-bottom)+1rem)]">
-      <div className="mx-auto grid max-w-sm grid-cols-4 gap-1 rounded-[2rem] border bg-background/90 p-2 backdrop-blur-2xl shadow-lg supports-backdrop-filter:bg-background/75">
+    <nav className="fixed inset-x-0 bottom-0 z-50 px-3 pb-[calc(env(safe-area-inset-bottom)+1rem)]">
+      <div className="mx-auto grid max-w-sm grid-cols-4 gap-1 rounded-[2rem] border p-1 backdrop-blur-2xl shadow-lg supports-backdrop-filter:bg-background/50">
         {items.map((item) => {
           const Icon = item.icon
           const active =
@@ -46,9 +46,9 @@ const BottomNavigation = () => {
               href={item.href}
               aria-current={active ? "page" : undefined}
               className={cn(
-                "group flex flex-col items-center justify-center gap-0.5 rounded-[1.5rem] px-2 text-[11px] font-medium text-muted-foreground transition-all",
+                "group flex flex-col items-center justify-center gap-0.5 rounded-[1.5rem] p-1 text-[10px] font-medium text-muted-foreground transition-all",
                 "active:scale-[0.97]",
-                active ? "text-primary" : "hover:text-primary"
+                active ? "text-primary bg-secondary/20 backdrop-blur-lg shadow" : "hover:text-primary hover:bg-secondary/20 hover:backdrop-blur-lg hover:shadow"
               )}
             >
               <span

@@ -18,16 +18,29 @@ const groupsData: Group[] = [
     id: 1,
     name: 'Хөвсгөл аялал',
     date: '2026-05-23',
+    totalAmount: 1200000,
+    memberCount: 9
   },
   {
     id: 2,
     name: 'Baynaa HBD',
     date: '2026-04-03',
+    totalAmount: 345000,
+    memberCount: 6
   },
   {
     id: 3,
     name: 'Friends уулзалт',
     date: '2026-02-10',
+    totalAmount: 225700,
+    memberCount: 4
+  },
+  {
+    id: 4,
+    name: 'Khongor төрсөн өдөр',
+    date: '2026-01-14',
+    totalAmount: 316000,
+    memberCount: 7
   }
 ]
 
@@ -43,25 +56,33 @@ export default async function MainPage() {
       <main className="mx-auto flex max-w-lg flex-col gap-5 px-4 py-4">
         <section>
           <div className="mb-3">
-            <h2 className="text-base font-semibold">Тооцоо</h2>
+            <h2 className="text-base font-bold">Тооцоо</h2>
             <p className="text-xs text-muted-foreground">Авлага болон өглөгийн товч мэдээлэл</p>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <div className="rounded-md border bg-card p-4">
-              <div className="mb-4 flex size-9 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600">
-                <ArrowDownLeft className="size-5" />
+            <div className="rounded-md shadow bg-card p-4">
+              <div className='flex items-center justify-between mb-4'>
+                <div className="flex size-9 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600">
+                  <ArrowDownLeft className="size-5" />
+                </div>
+                <p className="text-xs font-semibold text-emerald-600 bg-emerald-500/10 rounded-full px-2 py-0.5 ">Авлага</p>
               </div>
-              <p className="text-xs text-muted-foreground">Авлага</p>
-              <p className="mt-1 text-2xl font-bold">0₮</p>
+
+              <p className="mt-1 text-2xl font-bold">50,000₮</p>
+              <p className='text-xs text-muted-foreground'>Та бусдаас авах</p>
             </div>
 
-            <div className="rounded-md border bg-card p-4">
-              <div className="mb-4 flex size-9 items-center justify-center rounded-full bg-red-500/10 text-red-600">
-                <ArrowUpRight className="size-5" />
+            <div className="rounded-md shadow bg-card p-4">
+              <div className='flex items-center justify-between mb-4'>
+                <div className="flex size-9 items-center justify-center rounded-full bg-red-500/10 text-red-600">
+                  <ArrowUpRight className="size-5" />
+                </div>
+                <p className="text-xs font-semibold bg-red-500/10 text-red-600 rounded-full px-2 py-0.5 ">Өглөг</p>
               </div>
-              <p className="text-xs text-muted-foreground">Өглөг</p>
+
               <p className="mt-1 text-2xl font-bold">0₮</p>
+              <p className='text-xs text-muted-foreground'>Та бусдад өгөх</p>
             </div>
           </div>
         </section>
@@ -69,8 +90,8 @@ export default async function MainPage() {
         <section>
           <div className="mb-3 flex items-center justify-between">
             <div>
-              <h2 className="text-base font-semibold">Groups</h2>
-              <p className="text-xs text-muted-foreground">Идэвхтэй тооцоонууд</p>
+              <h2 className="text-base font-semibold">Бүлэг</h2>
+              <p className="text-xs text-muted-foreground">Идэвхтэй</p>
             </div>
             <Button variant="ghost" size="sm" className="rounded-full">
               Бүгд
@@ -78,7 +99,7 @@ export default async function MainPage() {
           </div>
 
           <ItemGroup className="gap-3">
-            {groupsData.map(group => (<GroupItem key={group.id} data={group} />))}
+            {groupsData.map((group, index) => (<GroupItem key={group.id} data={group} index={index} />))}
           </ItemGroup>
         </section>
 

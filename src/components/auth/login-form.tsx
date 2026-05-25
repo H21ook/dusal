@@ -5,13 +5,9 @@ import Link from 'next/link'
 import { signIn } from '@/actions/auth'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
-import { Input } from '../ui/input'
 import {
     Card,
     CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
 } from "@/components/ui/card"
 
 import {
@@ -19,6 +15,7 @@ import {
     FieldDescription,
     FieldGroup,
     FieldLabel,
+    FieldSeparator,
 } from "@/components/ui/field"
 
 import {
@@ -27,7 +24,7 @@ import {
     InputGroupButton,
     InputGroupInput,
 } from "@/components/ui/input-group"
-import { Eye, EyeClosed } from 'lucide-react'
+import { Eye, EyeClosed, Lock, Mail } from 'lucide-react'
 
 export function LoginForm() {
     const [email, setEmail] = useState('')
@@ -60,13 +57,17 @@ export function LoginForm() {
 
     return (
         <div className="w-full max-w-md mx-auto space-y-6">
-            <Card className="w-full max-w-sm bg-clip-padding backdrop-filter backdrop-blur bg-card/40">
-                <CardHeader>
-                    <CardTitle>Login to your account</CardTitle>
-                    <CardDescription>
-                        Enter your email below to login to your account
-                    </CardDescription>
-                </CardHeader>
+
+
+            <div className='flex flex-col items-center text-center'>
+                <div className='size-16 rounded-lg bg-amber-200 mb-4'>
+
+                </div>
+                <h1 className='text-2xl font-semibold tracking-tight'>Нэвтрэх</h1>
+                <p className='text-sm text-muted-foreground'>Нэвтрэх мэдээллээ оруулна уу.</p>
+            </div>
+
+            <Card className="w-full bg-clip-padding backdrop-filter backdrop-blur bg-card/40 ring-0 shadow-md">
 
                 <CardContent>
                     <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
@@ -78,40 +79,43 @@ export function LoginForm() {
 
 
                         <FieldGroup>
-                            <Field>
-                                <FieldLabel htmlFor="email">Email</FieldLabel>
-                                <Input
-                                    type="email"
-                                    required
-                                    autoComplete="off"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="you@example.com"
-                                />
+                            <Field className='gap-2'>
+                                <FieldLabel htmlFor="email">И-мэйл</FieldLabel>
+                                <InputGroup>
+                                    <InputGroupAddon>
+                                        <Mail />
+                                    </InputGroupAddon>
+                                    <InputGroupInput
+                                        type="email"
+                                        required
+                                        className='text-sm'
+                                        autoComplete="off"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        placeholder="И-мэйл хаяг оруулна уу"
+                                    />
+                                </InputGroup>
                             </Field>
 
-                            <Field>
-                                <div className="flex items-center">
-                                    <FieldLabel htmlFor="password">Password</FieldLabel>
-                                    <Link
-                                        href="/auth/forgot-password"
-                                        className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                                    >
-                                        Forgot password?
-                                    </Link>
-                                </div>
+                            <Field className='gap-2'>
+                                <FieldLabel htmlFor="password">Нууц үг</FieldLabel>
                                 <InputGroup>
+                                    <InputGroupAddon>
+                                        <Lock />
+                                    </InputGroupAddon>
                                     <InputGroupInput
                                         id="password"
+                                        className='text-sm'
                                         type={isShowPassword ? "text" : "password"}
                                         required
+                                        placeholder='Нууц үг оруулна уу'
                                         autoComplete="off"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)} />
                                     <InputGroupAddon align="inline-end">
                                         <InputGroupButton
-                                            aria-label={isShowPassword ? "Hide password" : "Show password"}
-                                            title={isShowPassword ? "Hide password" : "Show password"}
+                                            aria-label={isShowPassword ? "Нууц үг нуух" : "Нууц үг харах"}
+                                            title={isShowPassword ? "Нууц үг нуух" : "Нууц үг харах"}
                                             size="icon-xs"
                                             onClick={() => {
                                                 setIsShowPassword(prev => !prev)
@@ -123,15 +127,30 @@ export function LoginForm() {
                                 </InputGroup>
                             </Field>
 
-                            <Field>
-                                <Button disabled={loading} type="submit">Login</Button>
-                                <Button disabled={loading} variant="outline" type="button">
-                                    Login with Google
+                            <Field className='gap-2'>
+                                <div className="flex items-center">
+                                    <div></div>
+                                    <Link
+                                        href="/auth/forgot-password"
+                                        className="ml-auto inline-block text-sm underline-offset-4 hover:underline text-primary"
+                                    >
+                                        Нууц үг мартсан
+                                    </Link>
+                                </div>
+                                <Button disabled={loading} className='rounded-lg' size="lg" type="submit">Нэвтрэх</Button>
+
+                                <FieldSeparator className='my-2'>
+                                    эсвэл
+                                </FieldSeparator>
+
+                                <Button disabled={loading} className='rounded-lg' size="lg" variant="outline" type="button">
+                                    Google-ээр нэвтрэх
                                 </Button>
-                                <FieldDescription className="text-center">
-                                    Don&apos;t have an account? <Link href="/auth/signup">Sign up</Link>
+                                <FieldDescription className="text-center text-sm">
+                                    Бүртгэлгүй юу? &nbsp; <Link className='text-primary no-underline!' href="/auth/signup">Бүртгүүлэх</Link>
                                 </FieldDescription>
                             </Field>
+
                         </FieldGroup>
                     </form>
                 </CardContent>
